@@ -1,0 +1,72 @@
+#PYTHON SLOT MACHINE PROGRAM
+import random
+
+#Function to get 3 random symbols from the list
+def spin_row():
+    symbols = ['🍒', '⭐' ,'🔔' ,'🍉','🍋']
+    return [random.choice(symbols) for symbol in range(3)]
+
+#Function to print rows (not nessecary ,here it's just used for design/beautification)
+def print_row(row):
+    print("*************")
+    print(" | ".join(row))
+    print("*************")
+
+#Function to allot points (according to the each symbol)
+def get_payout(row,bet):
+    if row[0] == row[1] == row[2]:
+        if row[0] == '🍒':
+            return bet * 3
+        if row[0] == '⭐':
+            return bet * 4
+        if row[0] == '🔔':
+            return bet * 5
+        if row[0] == '🍋':
+            return bet * 10
+        if row[0] == '🍉':
+            return bet * 20
+    return 0
+
+def main():
+    balance = 100
+    print("-----Welcome to Pyhton Slot Machine-----")
+    print("        Symbols: 🍒 ⭐ 🔔 🍉 🍋")
+
+    #balance > 0 ,so that the user won't be able to spin if he has no balance
+    while balance > 0:
+        print(f"Current balance: ${balance}")
+        bet = input("Enter your bet amount: ")
+        #is.digit() ,to cheb=ck whether the user input is a number or not
+        if not bet.isdigit():
+            print("Pls enter a valid number.")
+            continue
+        bet = int(bet)
+        #bet > balance ,to check if the bet is not made more than the balance amount
+        if bet > balance:
+            print("Insufficient Funds")
+            continue
+        #bet <=0 ,so the user can not make a bet for 0 or negative value
+        if bet <= 0:
+            print("Bet must be greater than zero")
+            continue
+        balance-=bet
+        row = spin_row()
+        print("Spinning...")
+        print_row(row)
+
+        payout = get_payout(row, bet)
+
+        if payout > 0:
+            print("You won the bet!!")
+        else:
+            print("You lost your bet")
+        balance+=payout
+
+        play_again= input("Do you want to play agian (Y/N)").upper()
+        if play_again != 'Y':
+            break
+    print(f"Your Final balance is {balance}")
+
+#To make it standalone or all in one function depending on if the main() is called or not
+if __name__ == '__main__':
+    main()
